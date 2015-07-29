@@ -1,0 +1,6 @@
+.git
+*.swp
+data
+logs
+conf
+docker
