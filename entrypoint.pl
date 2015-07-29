@@ -26,6 +26,11 @@ unless ( -d "/var/run/vsftpd/empty"){
   system("mkdir", "-p", "/var/run/vsftpd/empty");
 }
 
+my $conf="/etc/vsftpd.conf";
+if ( -f $conf && (stat($conf))[4] != 0 ){
+  system("chown", "root.root", "$conf");
+}
+
 #system("rm", "-f", "/run/crond.pid") if ( -f "/run/crond.pid" );
 #system("/usr/sbin/cron");
 #
