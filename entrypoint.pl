@@ -47,7 +47,16 @@ if ( -f $conf && (stat($conf))[4] != 0 ){
 #$( = $) = $gid; die "switch gid error\n" if $gid != $( ;
 #$< = $> = $uid; die "switch uid error\n" if $uid != $< ;
 
+# 在命令行末尾添加日志开关
+my @cmd   = @ARGV;
+if ( $ENV{'DEBUG'} =~ /YES$/){
+  push @cmd, "/etc/vsftpd.conf";
+  push @cmd, "-oxferlog_std_format=NO";
+}
+
 $ENV{'HOME'} = "/home/docker";
+
+# 信号处理,无法自行回收
 $SIG{TERM} = sub {
   my @proc = `ps -efw|grep vsftpd`;
   my $pid  = (split/\s+/,$proc[1])[1];
@@ -55,4 +64,4 @@ $SIG{TERM} = sub {
   print "kill $pid\n";
 };
 
-system(@ARGV);
+system(@cmd);

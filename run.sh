@@ -31,15 +31,16 @@ _port
 _run() {
   local mode="-d --restart=always"
   local name="$container_name"
-  local cmd=""
+  local cmd="/usr/sbin/vsftpd"
 
   [ "x$1" == "xdebug" ] && _run_debug
 
   sudo docker run $mode $port \
     -e "TZ=Asia/Shanghai"     \
     -e "User_Id=${User_Id}"   \
-    $volume      \
-    -w "/data/" \
+    -e "DEBUG=NO" \
+    $volume       \
+    -w "/data/"   \
     -v ${current_dir}/logs/:/logs/ \
     -v ${current_dir}/data/:/data/ \
     -v ${current_dir}/conf/:/etc/vsftpd/ \
