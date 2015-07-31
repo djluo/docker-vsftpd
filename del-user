@@ -1,0 +1,17 @@
+#!/bin/bash
+
+umask 0077
+set -e
+
+username="${1}"
+
+if [ "$#" -eq 0 ]; then
+    echo "usage: $0 <user1> <user2>..."
+    echo
+    exit 127
+fi
+
+for user in $@
+do
+  sed -i "/^${user}$/d" /etc/vsftpd/user_list
+done

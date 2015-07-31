@@ -18,6 +18,8 @@ RUN export http_proxy="http://172.17.42.1:8080/" \
 COPY ./entrypoint.pl /entrypoint.pl
 COPY ./vsftpd.conf   /etc/vsftpd.conf
 COPY ./vsftpd.pam    /etc/pam.d/vsftpd-pam
+COPY ./add-user      /usr/bin/add-user
+COPY ./del-user      /usr/bin/del-user
 
 EXPOSE 3555
 EXPOSE 3556 3557 3558 3559 3560

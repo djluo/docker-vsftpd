@@ -19,14 +19,19 @@ images="${registry}/baoyu/vsftpd"
 default_port="0.0.0.0:3555:3555 0.0.0.0:3556:3556 0.0.0.0:3557:3557 0.0.0.0:3558:3558 0.0.0.0:3559:3559 0.0.0.0:3560:3560"
 
 action="$1"    # start or stop ...
-_get_uid "$2"  # uid=xxxx ,default is "1000"
-shift $flag_shift
-unset  flag_shift
+if [ "x$action" == "xexec" ];then
+  shift
+  exec_cmd=$@
+else
+  _get_uid "$2"  # uid=xxxx ,default is "1000"
+  shift $flag_shift
+  unset  flag_shift
 
-# 转换需映射的端口号
-app_port="$@"  # hostPort
-app_port=${app_port:=${default_port}}
-_port
+  # 转换需映射的端口号
+  app_port="$@"  # hostPort
+  app_port=${app_port:=${default_port}}
+  _port
+fi
 
 _run() {
   local mode="-d --restart=always"

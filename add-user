@@ -1,0 +1,26 @@
+#!/bin/bash
+# from: https://github.com/helderco/docker-vsftpd/
+umask 0077
+set -e
+
+database=/etc/vsftpd/virtual-users.db
+
+if [ "$1" = "-d" ]; then
+    [ -f $database ] && rm $database
+    shift
+fi
+
+username="${1}"
+password="${2}"
+
+if [ "$#" -ne 2 ]; then
+    echo "usage: $0 [-d] <user> <password>"
+    echo
+    echo "The -d option deletes the database before the operation."
+    exit 127
+fi
+
+[ -d "/etc/vsftpd/users.d" ] || mkdir /etc/vsftpd/users.d
+
+echo -e "$username\n$password" | db_load -T -t hash $database
+echo  "$username" >> /etc/vsftpd/user_list
