@@ -48,4 +48,11 @@ if ( -f $conf && (stat($conf))[4] != 0 ){
 #$< = $> = $uid; die "switch uid error\n" if $uid != $< ;
 
 $ENV{'HOME'} = "/home/docker";
-exec(@ARGV);
+$SIG{TERM} = sub {
+  my @proc = `ps -efw|grep vsftpd`;
+  my $pid  = (split/\s+/,$proc[1])[1];
+  system("kill", "$pid");
+  print "kill $pid\n";
+};
+
+system(@ARGV);
