@@ -26,7 +26,8 @@ unless ( -d "/var/run/vsftpd/empty"){
   system("mkdir", "-p", "/var/run/vsftpd/empty");
 }
 
-my $conf="/etc/vsftpd.conf";
+my $conf="/etc/vsftpd/vsftpd.conf";
+system("cp", "/etc/vsftpd.conf", "$conf" ) unless ( -f $conf );
 if ( -f $conf && (stat($conf))[4] != 0 ){
   system("chown", "root.root", "$conf");
 }
@@ -63,9 +64,10 @@ if( $ENV{'RSYNC_PASSWORD'} ){
 #$< = $> = $uid; die "switch uid error\n" if $uid != $< ;
 
 # 在命令行末尾添加日志开关
-my @cmd   = @ARGV;
+my @cmd = @ARGV;
+push @cmd, "/etc/vsftpd/vsftpd.conf";
+
 if ( $ENV{'DEBUG'} =~ /YES$/){
-  push @cmd, "/etc/vsftpd.conf";
   push @cmd, "-oxferlog_std_format=NO";
 }
 
