@@ -67,11 +67,10 @@ if( $ENV{'RSYNC_PASSWORD'} ){
 my @cmd = @ARGV;
 push @cmd, "/etc/vsftpd/vsftpd.conf";
 
-if ( $ENV{'DEBUG'} =~ /YES$/){
-  push @cmd, "-oxferlog_std_format=NO";
-}
+push @cmd, "-opasv_address=$ENV{'PASV_IP'}" if $ENV{'PASV_IP'};
+push @cmd, "-oxferlog_std_format=NO"        if ( $ENV{'DEBUG'} =~ /^YES$/ );
 
-$ENV{'HOME'} = "/home/docker";
+$ENV{'HOME'} = "/root";
 
 # 信号处理,无法自行回收
 $SIG{TERM} = sub {

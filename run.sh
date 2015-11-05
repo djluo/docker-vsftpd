@@ -41,9 +41,10 @@ _run() {
   [ "x$1" == "xdebug" ] && _run_debug
 
   sudo docker run $mode $port \
+    -e "DEBUG=NO" \
     -e "TZ=Asia/Shanghai"     \
     -e "User_Id=${User_Id}"   \
-    -e "DEBUG=NO" \
+    -e "PASV_IP=10.0.2.15"    \
     $volume       \
     -w "/data/"   \
     -v ${current_dir}/logs/:/logs/ \
