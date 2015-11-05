@@ -78,5 +78,6 @@ $SIG{TERM} = sub {
   system("kill", "$pid");
   print "kill $pid\n";
 };
+$SIG{CHLD} = 'IGNORE';
 
 system(@cmd);
